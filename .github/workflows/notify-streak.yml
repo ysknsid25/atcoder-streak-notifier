@@ -26,9 +26,7 @@ jobs:
         files=$(git diff --name-only --diff-filter=A ${{ github.event.before }} ${{ github.sha }}  | grep -E '^[0-9]+-[A-G]')
         if [ -n "$files" ]; then
           echo "Found file(s): $files"
-          # 変数をJSON形式で送信するために、適切にエスケープ
           json_payload=$(jq -n --arg username "test" --arg content "解いたのはこのファイルたち\n$files" '{username: $username, content: $content}')
-          # JSONをDiscordに送信
           curl -H "Content-Type: application/json" -d "$json_payload" "https://discord.com/api/webhooks/1298288337227874417/bDZyqaxUWQeKfTpkdsnEygE7xIHomc4fg3W0LU7xHTXiArojiIebzxa0IJKXksWTUqOK"
         else
           echo "No matching files found."
