@@ -15,11 +15,20 @@ jobs:
       with:
         fetch-depth: 2  # 過去のコミットも含めて取得（diff用）
   
-    - name: Get commit info and changed files
+    - name: Has diff?
+      if: github.event.before == '0000000000000000000000000000000000000000'
       run: |
-        echo "Latest commit SHA: ${{ github.sha }}"
-        echo "Commit message: ${{ github.event.head_commit.message }}"
-        echo "Committed by: ${{ github.event.head_commit.committer.name }}"
-        
-        echo "Changed files:"
-        git diff --name-only ${{ github.event.before }} ${{ github.sha }}
+        echo "This is the first commit, skipping diff."
+        exit 0
+
+    - name: Get changed files
+      run: |
+        files=git diff --name-only ${{ github.event.before }} ${{ github.sha }}  | grep -E '^[0-9]+-[A-G]\.$') | sort | uniq
+        echo "Changed files: $files"
+        echo "files=$files" >> $GITHUB_ENV
+
+    - name: Notify if files are defined
+      if: env.files != ''
+      run: |
+        echo "Changed files are: ${{ env.files }}"
+    
