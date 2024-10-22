@@ -23,12 +23,10 @@ jobs:
 
     - name: Get changed files
       run: |
-        files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }}  | grep -E '^[0-9]+-[A-G]')
-        echo "Changed files: $files"
-        echo "files=$files" >> $GITHUB_ENV
-
-    - name: Notify if files are defined
-      if: env.files != ''
-      run: |
-        echo "Changed files are: ${{ env.files }}"
-    
+        files=$(git diff --name-only --diff-filter=A ${{ github.event.before }} ${{ github.sha }}  | grep -E '^[0-9]+-[A-G]')
+        if [ -n "$files" ]; then
+          echo "Found file(s): $files"
+          curl -X POST -F content="このファイルたち $files" https://discord.com/api/webhooks/1298288337227874417/bDZyqaxUWQeKfTpkdsnEygE7xIHomc4fg3W0LU7xHTXiArojiIebzxa0IJKXksWTUqOK &> /dev/null
+        else
+          echo "No matching files found."
+        fi    
