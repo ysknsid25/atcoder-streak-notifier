@@ -23,7 +23,7 @@ jobs:
 
     - name: Get changed files
       run: |
-        files=git diff --name-only ${{ github.event.before }} ${{ github.sha }}  | grep -E '^[0-9]+-[A-G]'
+        files=(git diff --name-only ${{ github.event.before }} ${{ github.sha }}  | grep -E '^[0-9]+-[A-G]')
         echo "Changed files: $files"
         echo "files=$files" >> $GITHUB_ENV
 
