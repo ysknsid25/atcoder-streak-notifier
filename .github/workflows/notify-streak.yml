@@ -24,7 +24,7 @@ jobs:
     - name: Get changed files
       run: |
         files=$(git diff --name-only --diff-filter=A ${{ github.event.before }} ${{ github.sha }}  | grep -E '^[0-9]+-[A-G]')
-        message="問題を解いたのは\n$files"
+        message="問題を解いたのは<br>$files"
         if [ -n "$files" ]; then
           echo "Found file(s): $files"
           json_payload=$(jq -n --arg username "test" --arg content "$message" '{username: $username, content: $content}')
