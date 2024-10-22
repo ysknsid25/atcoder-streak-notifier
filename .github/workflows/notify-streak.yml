@@ -23,10 +23,11 @@ jobs:
 
     - name: Get changed files
       run: |
-        files="問題を解いたのは\n $(git diff --name-only --diff-filter=A ${{ github.event.before }} ${{ github.sha }}  | grep -E '^[0-9]+-[A-G]')"
+        files=$(git diff --name-only --diff-filter=A ${{ github.event.before }} ${{ github.sha }}  | grep -E '^[0-9]+-[A-G]')
+        message="問題を解いたのは\n$files"
         if [ -n "$files" ]; then
           echo "Found file(s): $files"
-          json_payload=$(jq -n --arg username "test" --arg content "$files" '{username: $username, content: $content}')
+          json_payload=$(jq -n --arg username "test" --arg content "$message" '{username: $username, content: $content}')
           curl -H "Content-Type: application/json" -d "$json_payload" "https://discord.com/api/webhooks/1298288337227874417/bDZyqaxUWQeKfTpkdsnEygE7xIHomc4fg3W0LU7xHTXiArojiIebzxa0IJKXksWTUqOK"
         else
           echo "No matching files found."
