@@ -20,7 +20,7 @@ jobs:
         if [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
           echo "This is the first commit, skipping diff."
         else
-          files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E '^[0-9]+-[A-G]\.(kt|py|ts)$')
+          files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E '^[0-9]+-[A-G]\.$')
           if [ -n "$files" ]; then
             echo "Found file(s): $files"
           else
