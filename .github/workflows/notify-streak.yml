@@ -1,0 +1,22 @@
+name: Notify Solve Streak
+
+on:
+  push:
+    paths:
+      - '**/*'  # すべてのファイルが対象
+
+jobs:
+  notify-solve-streak:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out the repository
+      uses: actions/checkout@v3
+
+    - name: Find files with specific pattern
+      run: |
+        files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E '^[0-9]+-[A-G]\.$')
+        if [ -n "$files" ]; then
+          echo "Found file(s): $files"
+        else
+          echo "No matching files found."
