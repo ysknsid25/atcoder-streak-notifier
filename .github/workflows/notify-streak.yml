@@ -11,12 +11,19 @@ jobs:
 
     steps:
     - name: Check out the repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # フル履歴を取得する
 
     - name: Find files with specific pattern
       run: |
-        files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E '^[0-9]+-[A-G]\.$')
-        if [ -n "$files" ]; then
-          echo "Found file(s): $files"
+        if [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
+          echo "This is the first commit, skipping diff."
         else
-          echo "No matching files found."
+          files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E '^[0-9]+-[A-G]\.(kt|py|ts)$')
+          if [ -n "$files" ]; then
+            echo "Found file(s): $files"
+          else
+            echo "No matching files found."
+          fi
+        fi
