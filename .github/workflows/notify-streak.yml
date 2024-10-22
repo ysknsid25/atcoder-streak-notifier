@@ -26,7 +26,7 @@ jobs:
         files=$(git diff --name-only --diff-filter=A ${{ github.event.before }} ${{ github.sha }}  | grep -E '^[0-9]+-[A-G]')
         if [ -n "$files" ]; then
           echo "Found file(s): $files"
-          curl -X POST -F content="解いたのはこのファイルたち\r $files" https://discord.com/api/webhooks/1298288337227874417/bDZyqaxUWQeKfTpkdsnEygE7xIHomc4fg3W0LU7xHTXiArojiIebzxa0IJKXksWTUqOK &> /dev/null
+          curl -H "Content-Type: application/json" -d '{"username": "test", "content": "解いたのはこのファイルたち\n $files"}' "https://discord.com/api/webhooks/1298288337227874417/bDZyqaxUWQeKfTpkdsnEygE7xIHomc4fg3W0LU7xHTXiArojiIebzxa0IJKXksWTUqOK"
         else
           echo "No matching files found."
           exit 0
