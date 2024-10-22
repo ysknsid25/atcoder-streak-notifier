@@ -13,17 +13,13 @@ jobs:
     - name: Check out the repository
       uses: actions/checkout@v4
       with:
-        fetch-depth: 0  # フル履歴を取得する
-
-    - name: Find files with specific pattern
+        fetch-depth: 2  # 過去のコミットも含めて取得（diff用）
+  
+    - name: Get commit info and changed files
       run: |
-        if [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
-          echo "This is the first commit, skipping diff."
-        else
-          files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E '^[0-9]+-[A-G]\.$')
-          if [ -n "$files" ]; then
-            echo "Found file(s): $files"
-          else
-            echo "No matching files found."
-          fi
-        fi
+        echo "Latest commit SHA: ${{ github.sha }}"
+        echo "Commit message: ${{ github.event.head_commit.message }}"
+        echo "Committed by: ${{ github.event.head_commit.committer.name }}"
+        
+        echo "Changed files:"
+        git diff --name-only ${{ github.event.before }} ${{ github.sha }}
