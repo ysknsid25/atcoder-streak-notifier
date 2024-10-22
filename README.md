@@ -16,6 +16,6 @@
 
 サーバー管理者はリクエストのあった画像と名前でbotを作り、発行したhookURLを共有してあげる。
 
-利用者は、hookURLを`<change your hooks url>`と置き換える
+利用者は、このリポジトリの`notify-streak`を自身の管理するリポジトリの`.github/workflows`に配備し、hookURLを`<change your hooks url>`と置き換える
 
 あとはpush時に、`開催回-問題番号.kt`のような形式が含まれていれば、それを通知してくれる。
